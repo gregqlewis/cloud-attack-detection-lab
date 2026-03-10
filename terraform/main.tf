@@ -12,10 +12,7 @@ terraform {
 
 provider "aws" {
   region  = var.aws_region    # pulls from variables.tf
-
-  # Tells Terraform to use your greg-admin profile
-  # Same credentials your CLI uses
-  profile = "default"
+  profile = "greg-cloudsec-lab" # Tells Terraform to use your AWS CLI profile named "greg-cloudsec-lab"
 
   # Tags applied to every resource this Terraform creates
   # Critical for cost tracking and cleanup
