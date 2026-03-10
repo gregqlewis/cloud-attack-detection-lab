@@ -5,6 +5,9 @@
 .terraform/
 .terraform.lock.hcl
 terraform.tfvars        # this file will hold your account ID - never commit it
+terraform.tfvars.json
+*.tfvars
+*.tfvars.json
 
 # Python
 __pycache__/
