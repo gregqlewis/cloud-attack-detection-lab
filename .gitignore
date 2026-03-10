@@ -22,4 +22,5 @@ credentials
 .DS_Store
 
 # VS Code
-.vscode/
+.vscode/.venv/
+venv/
