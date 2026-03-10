@@ -75,3 +75,29 @@ Run this at the end of every lab session:
 ### What Persists (by design)
 - Budget alert (intentional)
 - Your local terraform.tfstate file
+
+## Lesson Learned: Secrets in Git
+
+Early in the lab setup I accidentally committed my terraform.tfvars 
+file to the public repository. The file contained my AWS account ID 
+and email — not access keys, but sensitive enough to warrant immediate 
+action.
+
+This is one of the most common real-world security incidents affecting 
+developers and security engineers alike. It maps directly to 
+MITRE ATT&CK T1552.001 — Unsecured Credentials: Credentials in Files.
+
+The remediation process:
+1. Immediately assessed what was exposed
+2. Removed file from git tracking with git rm --cached
+3. Scrubbed entire git history using git filter-repo
+4. Force pushed rewritten history
+5. Strengthened .gitignore to prevent recurrence
+
+Tools that prevent this in production environments:
+- git-secrets: pre-commit hook that blocks credential commits
+- truffleHog: scans git history for exposed secrets
+- AWS Macie: detects sensitive data patterns in S3
+
+The irony of a security lab teaching its first lesson before 
+a single attack script was written wasn't lost on me.
