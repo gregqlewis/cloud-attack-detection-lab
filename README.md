@@ -1,4 +1,18 @@
 # cloud-attack-detection-lab
+## Lab Infrastructure — Intentional Misconfiguration Map
+
+| Control | cloudtrail-logs bucket | target-data bucket |
+|---|---|---|
+| Encryption | ✅ AES-256 | ❌ None |
+| Versioning | ✅ Enabled | ❌ None |
+| Deletion protection | ✅ Deny policy | ❌ None |
+| Public access block | ✅ All four settings | ❌ Partial |
+| Bucket policy | ✅ Restrictive | ❌ None |
+
+The target-data bucket represents a common real-world finding: 
+an S3 bucket provisioned quickly without security controls, 
+containing data that was never meant to be exposed.
+
 ## Detection Design Decisions
 
 ### Why Multi-Region CloudTrail
