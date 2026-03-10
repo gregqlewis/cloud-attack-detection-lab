@@ -112,19 +112,24 @@ data "aws_iam_policy_document" "cloudtrail_bucket_policy" {
 resource "aws_cloudtrail" "lab_trail" {
   name                          = "${var.project_name}-trail"
   s3_bucket_name                = aws_s3_bucket.cloudtrail_logs.id
-  include_global_service_events = true   # captures IAM events which are global
-  is_multi_region_trail         = true   # catches activity regardless of region
-  enable_log_file_validation    = true   # detects if log files are tampered with
+  include_global_service_events = true
+  is_multi_region_trail         = true
+  enable_log_file_validation    = true
 
-  # Management events - control plane (create, delete, modify resources)
   event_selector {
-    read_write_type           = "All"    # capture both read and write calls
+    read_write_type           = "All"
     include_management_events = true
 
-    # Data events - object level S3 operations (the exfiltration scenario)
     data_resource {
       type   = "AWS::S3::Object"
-      values = ["arn:aws:s3:::"]         # monitor ALL S3 buckets
+      values = ["arn:aws:s3:::"]
     }
   }
+
+  # Explicitly wait for bucket policy before creating trail
+  # Terraform can't infer this dependency automatically
+  depends_on = [
+    aws_s3_bucket_policy.cloudtrail_logs,
+    aws_s3_bucket_public_access_block.cloudtrail_logs
+  ]
 }
