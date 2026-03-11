@@ -1,0 +1,37 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "eventSource": "iam.amazonaws.com"
+          }
+        },
+        {
+          "terms": {
+            "eventName": [
+              "ListUsers",
+              "ListRoles",
+              "ListPolicies",
+              "GetPolicy",
+              "ListAttachedRolePolicies",
+              "GetPolicyVersion"
+            ]
+          }
+        }
+      ],
+      "must_not": [
+        {
+          "term": {
+            "userIdentity.userName": "greg-admin"
+          }
+        },
+        {
+          "wildcard": {
+            "userAgent": "*console.amazonaws.com*"
+          }
+        }
+      ]
+    }
+  }
+}
