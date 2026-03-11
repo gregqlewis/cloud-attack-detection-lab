@@ -1,0 +1,59 @@
+{
+    "eventVersion": "1.11",
+    "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "REDACTED",
+        "arn": "arn:aws:iam::REDACTED:user/cloud-attack-lab-attacker",
+        "accountId": "REDACTED",
+        "accessKeyId": "REDACTED",
+        "userName": "cloud-attack-lab-attacker"
+    },
+    "eventTime": "2026-03-11T19:42:55Z",
+    "eventSource": "sts.amazonaws.com",
+    "eventName": "AssumeRole",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "REDACTED",
+    "userAgent": "Boto3/1.42.65 md/Botocore#1.42.65 ua/2.1 os/macos#25.3.0 md/arch#arm64 lang/python#3.13.12 md/pyimpl#CPython m/b,D,Z cfg/retry-mode#legacy Botocore/1.42.65",
+    "requestParameters": {
+        "roleArn": "arn:aws:iam::REDACTED:role/cloud-attack-lab-privileged-role",
+        "roleSessionName": "legitimate-automation-session",
+        "durationSeconds": 900
+    },
+    "responseElements": {
+        "credentials": {
+            "accessKeyId": "REDACTED",
+            "sessionToken": "IQoJb3JpZ2luX2VjEJz//////////wEaCXVzLWVhc3QtMSJHMEUCIAE02mz3WCasUKdUxkVZy1MMse4JzGaiudLNxhNxmXCzAiEAmW7Ny7IT1kYU+9w2XlEiA79UAScHAgqWkdi9dNjyb9kqqgIIZRAAGgwyNjc5NDk3MDc3OTQiDDBn5kB+P79NdvgaRSqHAudqAvgrJtidF3LCj2XrWnNesKFDZQ3fEXvevLQMXIgf+7lD+81pvI+VC0NVHEhlC9Z0xW5sEmLr49vX0CFFPKAPknqfwqn4lbodDszvjgk8kNsVj7vpvGURUaHs9t/W/dubsOpcyG0dzpydEG85r1l9uWhqtv7ottF6BmGJcvLfUyKSZQtpLxFe3WftZ5tLdzev9gYe6i6Ik27/nzEzB77k6FfEsI+5oIkEecT4GzDzt7rvNwy78SmArW4Swidj9RxnWgHWGf8tG2tTkKSkwdG7TDpXku0Y6bGzdPvzHUgwxdWQniwfSsfT8sVQUDF7NR1kfkm5GzZTUz89vYW7BatuqVFcMY91ML+Lx80GOp0BZFNKB/tU1RpsM8NYO9Ihal3vBYLxzWUytR10GD5juvStACRam46HBeqAT7745RUHUQBuoWoXiRaZZv2LGsp97k8tcd55+MUKQGT0fn+yJqaHDfwWQ3yMUAjXjs/PM/sYpXXghm8eC66dRIQXzQpUxn2TULc/yJcDBOXUQa2VBT8bwL9nMRdOBSiFXFw9LvbYY5ejoSpjCKBlGdE17w==",
+            "expiration": "Mar 11, 2026, 7:57:55 PM"
+        },
+        "assumedRoleUser": {
+            "assumedRoleId": "AROAT4YYMCIJP4TWKEFHR:legitimate-automation-session",
+            "arn": "arn:aws:sts::REDACTED:assumed-role/cloud-attack-lab-privileged-role/legitimate-automation-session"
+        }
+    },
+    "additionalEventData": {
+        "ExtendedRequestId": "MTp1cy1lYXN0LTE6UzoxNzczMjU4MTc1MTAyOlI6eTBYMU5JcGc=",
+        "RequestDetails": {
+            "awsServingRegion": "us-east-1",
+            "endpointType": "regional"
+        }
+    },
+    "requestID": "1dda2ec2-e9d1-485c-9c0a-423c84e37402",
+    "eventID": "f9578f28-a24d-49e3-8dd4-5a599d3a2ba6",
+    "readOnly": true,
+    "resources": [
+        {
+            "accountId": "REDACTED",
+            "type": "AWS::IAM::Role",
+            "ARN": "arn:aws:iam::REDACTED:role/cloud-attack-lab-privileged-role"
+        }
+    ],
+    "eventType": "AwsApiCall",
+    "managementEvent": true,
+    "recipientAccountId": "REDACTED",
+    "eventCategory": "Management",
+    "tlsDetails": {
+        "tlsVersion": "TLSv1.3",
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "sts.us-east-1.amazonaws.com"
+    }
+}
