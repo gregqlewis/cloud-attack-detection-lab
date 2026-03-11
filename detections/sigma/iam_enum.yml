@@ -1,0 +1,67 @@
+title: AWS IAM Enumeration by Non-Admin Identity
+id: 7a3f2c1e-8b4d-4e9a-bc5f-1d6e8f9a2b3c
+status: experimental
+description: |
+    Detects IAM enumeration API calls made by non-administrative
+    identities. Adversaries who obtain valid cloud credentials
+    commonly enumerate IAM users, roles, and policies to map
+    the environment and identify privilege escalation paths.
+    
+    Single enumeration calls may be benign. This rule focuses
+    on calls from unexpected identities or programmatic sources
+    outside business hours as higher fidelity signals.
+
+references:
+    - https://attack.mitre.org/techniques/T1069/003/
+    - https://attack.mitre.org/techniques/T1078/004/
+
+author: Greg Lewis
+date: 2026-03-10
+modified: 2026-03-10
+
+tags:
+    - attack.discovery
+    - attack.t1069.003
+    - attack.initial_access
+    - attack.t1078.004
+
+logsource:
+    product: aws
+    service: cloudtrail
+
+detection:
+    selection:
+        eventSource: 'iam.amazonaws.com'
+        eventName:
+            - 'ListUsers'
+            - 'ListRoles'
+            - 'ListPolicies'
+            - 'GetPolicy'
+            - 'ListAttachedRolePolicies'
+            - 'GetPolicyVersion'
+
+    # Filter out known legitimate admin identities
+    # Update this list as your environment grows
+    filter_admin:
+        userIdentity.userName:
+            - 'greg-admin'
+
+    # Flag programmatic access specifically
+    # boto3 userAgent indicates scripted enumeration
+    filter_console:
+        userAgent|contains: 'console.amazonaws.com'
+
+    condition: selection and not filter_admin and not filter_console
+
+falsepositives:
+    - Legitimate automated tooling using programmatic access
+    - Security scanning tools running scheduled assessments
+    - New admin accounts not yet added to the filter list
+
+level: medium
+
+# Detection engineering notes:
+# High fidelity version: correlate multiple enumeration eventNames
+# from the same identity within a 5-minute window (enumeration chaining)
+# This single-event version is the baseline — tune after observing
+# false positive rate in your environment
