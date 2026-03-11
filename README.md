@@ -46,7 +46,7 @@ Response
 
 | Scenario | MITRE ATT&CK | Status |
 |---|---|---|
-| IAM Enumeration | T1069.003 | 🔜 In Progress |
+| IAM Enumeration | T1069.003 | ✅ Complete |
 | Privilege Escalation via Role Abuse | T1078.004 | 🔜 Planned |
 | Credential Theft | T1552.005 | 🔜 Planned |
 | S3 Data Exfiltration | T1530 | 🔜 Planned |
