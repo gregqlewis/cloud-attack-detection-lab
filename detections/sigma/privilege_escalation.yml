@@ -1,0 +1,82 @@
+title: AWS Privilege Escalation via IAM Role Assumption
+id: 4b2e8f1a-9c3d-4a7b-be6f-2d8e9f0a3c4d
+status: experimental
+description: |
+    Detects privilege escalation attempts via IAM role assumption
+    where a non-administrative identity assumes a role granting
+    elevated permissions. Adversaries who obtain valid credentials
+    commonly abuse misconfigured role trust policies to escalate
+    privileges and access resources beyond their initial scope.
+
+    Key indicators:
+    - AssumeRole call from unexpected IAMUser identity
+    - Subsequent API calls with AssumedRole identity type
+    - Role session name using generic or benign-sounding values
+
+references:
+    - https://attack.mitre.org/techniques/T1078/004/
+    - https://attack.mitre.org/techniques/T1548/
+
+author: Greg Lewis
+date: 2026-03-11
+modified: 2026-03-11
+
+tags:
+    - attack.privilege_escalation
+    - attack.t1078.004
+    - attack.t1548
+    - attack.discovery
+    - attack.t1033
+
+logsource:
+    product: aws
+    service: cloudtrail
+
+detection:
+    # Signal 1 — the role assumption event itself
+    selection_assumerole:
+        eventSource: 'sts.amazonaws.com'
+        eventName: 'AssumeRole'
+        userIdentity.type: 'IAMUser'
+
+    # Filter out known legitimate role assumptions
+    # Admins regularly assume roles for routine operations
+    filter_admin:
+        userIdentity.userName:
+            - 'greg-admin'
+
+    # Signal 2 — post-escalation activity using assumed role
+    selection_post_escalation:
+        userIdentity.type: 'AssumedRole'
+        eventName:
+            - 'ListObjects'
+            - 'ListObjectsV2'
+            - 'GetObject'
+            - 'PutObject'
+            - 'DeleteObject'
+
+    # Filter out known legitimate assumed role activity
+    filter_known_roles:
+        userIdentity.sessionContext.sessionIssuer.userName:
+            - 'greg-admin'
+
+    condition: (selection_assumerole and not filter_admin) or
+               (selection_post_escalation and not filter_known_roles)
+
+falsepositives:
+    - Legitimate automation assuming roles for scheduled tasks
+    - CI/CD pipelines using role assumption for deployments
+    - Admin users assuming roles for cross-account access
+    - Security scanning tools using assumed roles
+
+level: high
+
+# Detection engineering notes:
+# This rule fires on either signal independently for maximum coverage
+# Highest fidelity: correlate both signals from same source
+# within a 5-minute window — AssumeRole followed by S3 access
+# indicates successful escalation and immediate data access
+#
+# The roleSessionName "legitimate-automation-session" used in the
+# lab demonstrates why session names cannot be trusted as a
+# primary detection signal — attackers control this value

@@ -47,27 +47,26 @@ Response
 | Scenario | MITRE ATT&CK | Status |
 |---|---|---|
 | IAM Enumeration | T1069.003 | ✅ Complete |
-| Privilege Escalation via Role Abuse | T1078.004 | 🔜 Planned |
-| Credential Theft | T1552.005 | 🔜 Planned |
+| Privilege Escalation via Role Abuse | T1078.004 | ✅ Complete |
+| Credential Theft | T1552.005 | ✅ Complete |
 | S3 Data Exfiltration | T1530 | 🔜 Planned |
 | Unauthorized API Usage | T1106 | 🔜 Planned |
 
 ---
 
-## Where We Are
+## Where We Stand
 ```
-Phase 2 — Attack Simulation
+Attack Simulation
   ✅ iam_enum.py
-
-Phase 3 — Detection Engineering
-  ✅ detections/sigma/iam_enum.yml
-  ✅ detections/opensearch/iam_enum_query.json
-  ⬜ remaining Sigma rules (one per attack)
-
-Phase 2 continued — remaining attack scripts
-  ⬜ privilege_escalation.py   ← next
-  ⬜ credential_theft.py
+  ✅ privilege_escalation.py
+  ⬜ credential_theft.py      ← next
   ⬜ s3_exfil.py
+
+Detection Engineering
+  ✅ sigma/iam_enum.yml
+  ✅ sigma/privilege_escalation.yml
+  ⬜ sigma/credential_theft.yml
+  ⬜ sigma/s3_exfil.yml
 ```
 ---
 

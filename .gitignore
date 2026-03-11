@@ -24,3 +24,4 @@ credentials
 # VS Code
 .vscode/.venv/
 venv/
+attack-simulation/.env

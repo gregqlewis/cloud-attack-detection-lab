@@ -1,0 +1,47 @@
+============================================================
+  Privilege Escalation Simulation
+  MITRE ATT&CK: T1078.004
+  Time: 2026-03-11T19:42:46Z
+============================================================
+
+[*] Phase 1 — Reconnaissance
+
+[*] Current Identity
+    Account: REDACTED-ACCOUNT-ID
+    UserID:  REDACTED-USER-ID
+    ARN:     arn:aws:iam::REDACTED-ACCOUNT-ID:user/cloud-attack-lab-attacker
+
+[*] Phase 2 — Privilege Escalation
+
+[*] Attempting to assume role: arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role
+[+] Role assumption SUCCESSFUL
+    Access Key ID:  REDACTED-ACCESS-KEY-ID
+    Session Token:  REDACTED-SESSION-TOKEN
+    Expiration:     2026-03-11 19:57:55+00:00
+
+[*] Phase 3 — Post-Escalation Access
+
+[*] Creating session with temporary credentials
+
+[*] Identity after escalation:
+
+[*] Current Identity
+    Account: REDACTED-ACCOUNT-ID
+    UserID:  REDACTED-ROLE-ID:legitimate-automation-session
+    ARN:     arn:aws:sts::REDACTED-ACCOUNT-ID:assumed-role/cloud-attack-lab-privileged-role/legitimate-automation-session
+
+[*] Attempting S3 ListBucket on target: cloud-attack-lab-target-data-REDACTED-ACCOUNT-ID
+[+] S3 access SUCCESSFUL — found 4 objects:
+    config/app-config-prod.json (294 bytes)
+    config/aws-credentials-backup.txt (235 bytes)
+    finance/q4-2024-revenue-report.csv (242 bytes)
+    hr/employee-records-2024.csv (253 bytes)
+
+============================================================
+[+] Privilege escalation chain complete
+
+    CloudTrail events generated:
+    - GetCallerIdentity  (T1033 - System Owner Discovery)
+    - AssumeRole         (T1078.004 - Valid Accounts: Cloud)
+    - ListObjectsV2      (post-escalation S3 access)
+============================================================
