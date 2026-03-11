@@ -85,4 +85,77 @@ resource "aws_s3_object" "credentials" {
   }
 }
 
-# Simulated finan
+# Simulated financial report
+resource "aws_s3_object" "financial_data" {
+  bucket  = aws_s3_bucket.target_data.id
+  key     = "finance/q4-2024-revenue-report.csv"
+  content = <<-EOT
+    quarter,revenue,expenses,net_income,margin
+    Q1-2024,4200000,3100000,1100000,26%
+    Q2-2024,4800000,3400000,1400000,29%
+    Q3-2024,5100000,3600000,1500000,29%
+    Q4-2024,5900000,4000000,1900000,32%
+    NOTE: THIS IS SIMULATED DATA FOR SECURITY LAB USE ONLY
+  EOT
+
+  tags = {
+    DataClassification = "SIMULATED-FINANCIAL"
+    LabUseOnly         = "true"
+  }
+}
+
+# Simulated application config with database credentials
+resource "aws_s3_object" "app_config" {
+  bucket  = aws_s3_bucket.target_data.id
+  key     = "config/app-config-prod.json"
+  content = jsonencode({
+    environment = "production"
+    database = {
+      host     = "prod-db.company.internal"
+      port     = 5432
+      username = "app_user"
+      password = "SIMULATED-PASSWORD-NOT-REAL"
+    }
+    api_keys = {
+      stripe     = "sk_test_SIMULATED_NOT_REAL"
+      sendgrid   = "SG.SIMULATED_NOT_REAL"
+    }
+    note = "THIS IS SIMULATED DATA FOR SECURITY LAB USE ONLY"
+  })
+
+  tags = {
+    DataClassification = "SIMULATED-CONFIG"
+    LabUseOnly         = "true"
+  }
+}
+
+# -------------------------------------------------------
+# EXFIL STAGING BUCKET — simulates attacker-controlled destination
+# -------------------------------------------------------
+
+# In a real attack this would be an external bucket
+# In the lab it stays in your account for safety and cost control
+# The exfil script copies target_data objects here
+resource "aws_s3_bucket" "exfil_staging" {
+  bucket        = "${var.project_name}-exfil-staging-${var.aws_account_id}"
+  force_destroy = true
+
+  tags = {
+    Purpose  = "attack-simulation"
+    Scenario = "attacker-controlled-destination"
+  }
+}
+
+# -------------------------------------------------------
+# OUTPUTS — used by attack scripts
+# -------------------------------------------------------
+
+output "target_bucket_name" {
+  value       = aws_s3_bucket.target_data.id
+  description = "Name of the misconfigured target bucket - used in exfil script"
+}
+
+output "exfil_bucket_name" {
+  value       = aws_s3_bucket.exfil_staging.id
+  description = "Name of the attacker staging bucket - exfil destination"
+}
