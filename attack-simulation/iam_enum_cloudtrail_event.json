@@ -1,0 +1,31 @@
+{
+    "eventVersion": "1.11",
+    "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAT4YYMCIJHAPH2O7BB",
+        "arn": "arn:aws:iam::REDACTED:user/cloud-attack-lab-attacker",
+        "accountId": "REDACTED",
+        "accessKeyId": "REDACTED",
+        "userName": "cloud-attack-lab-attacker"
+    },
+    "eventTime": "2026-03-10T23:48:28Z",
+    "eventSource": "iam.amazonaws.com",
+    "eventName": "ListUsers",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "REDACTED",
+    "userAgent": "Boto3/1.42.65 md/Botocore#1.42.65 ua/2.1 os/macos#25.3.0 md/arch#arm64 lang/python#3.13.11 md/pyimpl#CPython m/n,b,D,Z cfg/retry-mode#legacy Botocore/1.42.65",
+    "requestParameters": null,
+    "responseElements": null,
+    "requestID": "125deb8e-7fe4-4ec5-ba3b-a974f9b67e99",
+    "eventID": "a55d733a-df96-47c8-b7fe-8f4ea1911973",
+    "readOnly": true,
+    "eventType": "AwsApiCall",
+    "managementEvent": true,
+    "recipientAccountId": "REDACTED",
+    "eventCategory": "Management",
+    "tlsDetails": {
+        "tlsVersion": "TLSv1.3",
+        "cipherSuite": "TLS_AES_128_GCM_SHA256",
+        "clientProvidedHostHeader": "iam.amazonaws.com"
+    }
+}
