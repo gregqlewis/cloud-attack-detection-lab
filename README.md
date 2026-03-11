@@ -68,7 +68,7 @@ Phase 2 continued — remaining attack scripts
   ⬜ privilege_escalation.py   ← next
   ⬜ credential_theft.py
   ⬜ s3_exfil.py
-
+```
 ---
 
 ## Infrastructure Status
