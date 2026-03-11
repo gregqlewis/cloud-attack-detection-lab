@@ -54,6 +54,23 @@ Response
 
 ---
 
+## Where We Are
+```
+Phase 2 — Attack Simulation
+  ✅ iam_enum.py
+
+Phase 3 — Detection Engineering
+  ✅ detections/sigma/iam_enum.yml
+  ✅ detections/opensearch/iam_enum_query.json
+  ⬜ remaining Sigma rules (one per attack)
+
+Phase 2 continued — remaining attack scripts
+  ⬜ privilege_escalation.py   ← next
+  ⬜ credential_theft.py
+  ⬜ s3_exfil.py
+
+---
+
 ## Infrastructure Status
 
 | Resource | Status | Purpose |
