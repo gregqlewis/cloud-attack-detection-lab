@@ -1,0 +1,100 @@
+{
+  "Events": [
+    {
+      "EventId": "2a4ac90e-887d-4f0a-84c5-2deb64f68ff3",
+      "EventName": "AssumeRole",
+      "ReadOnly": "true",
+      "AccessKeyId": "REDACTED-ACCESS-KEY",
+      "EventTime": "2026-03-14T08:36:44-04:00",
+      "EventSource": "sts.amazonaws.com",
+      "Username": "cloud-attack-lab-attacker",
+      "Resources": [
+        {
+          "ResourceType": "AWS::IAM::AccessKey",
+          "ResourceName": "REDACTED-ACCESS-KEY"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "arn:aws:sts::REDACTED-ACCOUNT-ID:assumed-role/cloud-attack-lab-privileged-role/backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "AROAT4YYMCIJP4TWKEFHR:backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::IAM::Role",
+          "ResourceName": "arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role"
+        }
+      ],
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"IAMUser\",\"principalId\":\"AIDAT4YYMCIJAGOCGGCGW\",\"arn\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:user/cloud-attack-lab-attacker\",\"accountId\":\"REDACTED-ACCOUNT-ID\",\"accessKeyId\":\"REDACTED-ACCESS-KEY\",\"userName\":\"cloud-attack-lab-attacker\"},\"eventTime\":\"2026-03-14T12:36:44Z\",\"eventSource\":\"sts.amazonaws.com\",\"eventName\":\"AssumeRole\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"REDACTED-IP\",\"userAgent\":\"Boto3/1.42.65 md/Botocore#1.42.65 ua/2.1 os/macos#25.3.0 md/arch#arm64 lang/python#3.13.11 md/pyimpl#CPython m/Z,b,n,D cfg/retry-mode#legacy Botocore/1.42.65\",\"requestParameters\":{\"roleArn\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role\",\"roleSessionName\":\"backup-restore-session\",\"durationSeconds\":3600},\"responseElements\":{\"credentials\":{\"accessKeyId\":\"REDACTED-ACCESS-KEY\",\"sessionToken\":\"IQoJb3JpZ2luX2VjEN3//////////wEaCXVzLWVhc3QtMSJGMEQCIDf9hUw1giEba+1qky9+JWYhtVHPitb7xoFGqObk/MvYAiBqo4TBDuhyc0kw0AXzexsXj8xaRc4TNvZxDtatoIznDiqsAgim//////////8BEAAaDDI2Nzk0OTcwNzc5NCIMaxTCtli33AIxSmG+KoACZpCCqAY1+JAm3Bb9C7ZwrdNRg0rOo2KvEOeEHpoROlt/2tXDEg67jlFQAc+VG0ol9sszcaOuEYUwkBlpu6VFMZtIvHn/jVbWSvImxzz9BDZN+vrNhV4idas3VdSdL4/11dulp2AnLgpxL41YfJrgAHJz5aILP56Py3ORNLYNbIjvQ1lVYq/cyy3iRa7hcl52frhC/F5S+44ZgD/NlOBXEbxBo9CkQCf//MXh67gtu7+6RM9S1BLoJvgzydHqufZoFSCMkoo9N8P9zM82e3CafzuQ9dKkVewz7tW4Pd8iRmhNPCngdf7uyYt4wDfCf4M4p7wssF6tgGL86F/koDS5UjDcrNXNBjqeAZ8GOwO5//brzsE9OZxyPsKTvecOo1VYDiuJzF6zbpmfEZ6SuL65RDLtTWm7tnrwXzmsK8nhB1UBjuj01imtzPl2uYYQbtGWF8my7/yLM7SGQjyhqv52iddz4TO98EcKIBypQzZYXY3OeC+wNpKl7q0j6P17+brL2c0/fFlZ6+LYVdd4yNavNNmYfab/djGcrGsCQuZi/PtIMcCa5shc\",\"expiration\":\"Mar 14, 2026, 1:36:44 PM\"},\"assumedRoleUser\":{\"assumedRoleId\":\"AROAT4YYMCIJP4TWKEFHR:backup-restore-session\",\"arn\":\"arn:aws:sts::REDACTED-ACCOUNT-ID:assumed-role/cloud-attack-lab-privileged-role/backup-restore-session\"}},\"additionalEventData\":{\"ExtendedRequestId\":\"MTp1cy1lYXN0LTE6UzoxNzczNDkxODA0NjE3OlI6dHo3ODZmWmg=\",\"RequestDetails\":{\"awsServingRegion\":\"us-east-1\",\"endpointType\":\"regional\"}},\"requestID\":\"a3353089-b029-419c-9405-55404ede5890\",\"eventID\":\"2a4ac90e-887d-4f0a-84c5-2deb64f68ff3\",\"readOnly\":true,\"resources\":[{\"accountId\":\"REDACTED-ACCOUNT-ID\",\"type\":\"AWS::IAM::Role\",\"ARN\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"REDACTED-ACCOUNT-ID\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"sts.us-east-1.amazonaws.com\"}}"
+    },
+    {
+      "EventId": "d52f039d-9c7b-4c42-af2f-7e7874defa62",
+      "EventName": "AssumeRole",
+      "ReadOnly": "true",
+      "AccessKeyId": "REDACTED-ACCESS-KEY",
+      "EventTime": "2026-03-14T08:35:21-04:00",
+      "EventSource": "sts.amazonaws.com",
+      "Username": "cloud-attack-lab-attacker",
+      "Resources": [
+        {
+          "ResourceType": "AWS::IAM::AccessKey",
+          "ResourceName": "REDACTED-ACCESS-KEY"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "arn:aws:sts::REDACTED-ACCOUNT-ID:assumed-role/cloud-attack-lab-privileged-role/backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "AROAT4YYMCIJP4TWKEFHR:backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::IAM::Role",
+          "ResourceName": "arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role"
+        }
+      ],
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"IAMUser\",\"principalId\":\"AIDAT4YYMCIJAGOCGGCGW\",\"arn\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:user/cloud-attack-lab-attacker\",\"accountId\":\"REDACTED-ACCOUNT-ID\",\"accessKeyId\":\"REDACTED-ACCESS-KEY\",\"userName\":\"cloud-attack-lab-attacker\"},\"eventTime\":\"2026-03-14T12:35:21Z\",\"eventSource\":\"sts.amazonaws.com\",\"eventName\":\"AssumeRole\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"REDACTED-IP\",\"userAgent\":\"Boto3/1.42.65 md/Botocore#1.42.65 ua/2.1 os/macos#25.3.0 md/arch#arm64 lang/python#3.13.11 md/pyimpl#CPython m/Z,n,b,D cfg/retry-mode#legacy Botocore/1.42.65\",\"requestParameters\":{\"roleArn\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role\",\"roleSessionName\":\"backup-restore-session\",\"durationSeconds\":3600},\"responseElements\":{\"credentials\":{\"accessKeyId\":\"REDACTED-ACCESS-KEY\",\"sessionToken\":\"IQoJb3JpZ2luX2VjEN3//////////wEaCXVzLWVhc3QtMSJIMEYCIQDhr18WBHUV4mpHK09e5dQSsekONvqB4SPw0sTH/95aNwIhAKcXdn0l6OsJeOFtaguHzfxB3apmfRzO2XbkmLYAJfWLKqwCCKb//////////wEQABoMMjY3OTQ5NzA3Nzk0Igyxp6iaGKojYbtr2koqgAKMebk5u5ui8ASTgYzFhS181/kcI0WOevYB2B1V4bLs/OMwgZdZpgzpZCfCAZ4Fuyz721qe1h9brdj+R0yPHkruhRo/a8MuMoV/VPSfl/3wN25kujTxc/9Lih+Ue/fAzxd6meVQ5X4HiIzRd+VMRodXJJ+y1u5TJ5z6dOs6cQuaHPoFuD8F9rGog8zJurTKmgjxOEX+6HDbblpwWMkaYtRY5OK6HH0aOUHUV5SvB24wYNWoNM02oNVYOdof+8AOFDvALy8OQNZqey7fqGe4TXh/Og2Capqqw/umr5Qxu/jBCOCkVP9LxkN1wuKGF8QjUECDG4iMaxI6Ne6I4GgBINRSMIms1c0GOpwB7Ek1NKJ8YLXnZhUIowv0Bbo/MyueedpikDZr9ZmgOZHHVAFhMNMk3vVNXJkN2b8EAFsmfvWWFvSz5qBp8E4zYKaT3/UxPFQ3MjEMAecUoGovFrneIn+/MtwxjVNXZz8A8yXYZ6NPTEItkXy2JBFUV1jmiD3aaJtD5KN3Oj6bRl2RzphZ7uKRSxqE7g+NYeSsyGMS8vt3dknlcHtF\",\"expiration\":\"Mar 14, 2026, 1:35:21 PM\"},\"assumedRoleUser\":{\"assumedRoleId\":\"AROAT4YYMCIJP4TWKEFHR:backup-restore-session\",\"arn\":\"arn:aws:sts::REDACTED-ACCOUNT-ID:assumed-role/cloud-attack-lab-privileged-role/backup-restore-session\"}},\"additionalEventData\":{\"ExtendedRequestId\":\"MTp1cy1lYXN0LTE6UzoxNzczNDkxNzIxOTYxOlI6OWZUbG9mTTQ=\",\"RequestDetails\":{\"awsServingRegion\":\"us-east-1\",\"endpointType\":\"regional\"}},\"requestID\":\"bf2deba1-beba-4240-a6e4-8d014213bbcd\",\"eventID\":\"d52f039d-9c7b-4c42-af2f-7e7874defa62\",\"readOnly\":true,\"resources\":[{\"accountId\":\"REDACTED-ACCOUNT-ID\",\"type\":\"AWS::IAM::Role\",\"ARN\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"REDACTED-ACCOUNT-ID\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"sts.us-east-1.amazonaws.com\"}}"
+    },
+    {
+      "EventId": "f160597e-35a9-4143-9665-1532dab818a6",
+      "EventName": "AssumeRole",
+      "ReadOnly": "true",
+      "AccessKeyId": "REDACTED-ACCESS-KEY",
+      "EventTime": "2026-03-14T08:31:57-04:00",
+      "EventSource": "sts.amazonaws.com",
+      "Username": "cloud-attack-lab-attacker",
+      "Resources": [
+        {
+          "ResourceType": "AWS::IAM::AccessKey",
+          "ResourceName": "REDACTED-ACCESS-KEY"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "arn:aws:sts::REDACTED-ACCOUNT-ID:assumed-role/cloud-attack-lab-privileged-role/backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::STS::AssumedRole",
+          "ResourceName": "AROAT4YYMCIJP4TWKEFHR:backup-restore-session"
+        },
+        {
+          "ResourceType": "AWS::IAM::Role",
+          "ResourceName": "arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role"
+        }
+      ],
+      "CloudTrailEvent": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"IAMUser\",\"principalId\":\"AIDAT4YYMCIJAGOCGGCGW\",\"arn\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:user/cloud-attack-lab-attacker\",\"accountId\":\"REDACTED-ACCOUNT-ID\",\"accessKeyId\":\"REDACTED-ACCESS-KEY\",\"userName\":\"cloud-attack-lab-attacker\"},\"eventTime\":\"2026-03-14T12:31:57Z\",\"eventSource\":\"sts.amazonaws.com\",\"eventName\":\"AssumeRole\",\"awsRegion\":\"us-east-1\",\"sourceIPAddress\":\"REDACTED-IP\",\"userAgent\":\"Boto3/1.42.65 md/Botocore#1.42.65 ua/2.1 os/macos#25.3.0 md/arch#arm64 lang/python#3.13.11 md/pyimpl#CPython m/Z,b,n,D cfg/retry-mode#legacy Botocore/1.42.65\",\"requestParameters\":{\"roleArn\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role\",\"roleSessionName\":\"backup-restore-session\",\"durationSeconds\":3600},\"responseElements\":{\"credentials\":{\"accessKeyId\":\"REDACTED-ACCESS-KEY\",\"sessionToken\":\"IQoJb3JpZ2luX2VjEN3//////////wEaCXVzLWVhc3QtMSJHMEUCIQDKEi0bvYfC4buDUKYdBs0SNGlr8JgHsjJ5y73GIncrAQIgNVdH3KAECeUXxjlKC87gqJTO+u8ws5vdLgeJe4b99SgqrAIIpv//////////ARAAGgwyNjc5NDk3MDc3OTQiDJkwfk0BS+VzMuKNQiqAAitRUs8eMYPaoHtX/BYNKj75JSuh+Qz0nRXvq5VXx71yP+wfMhjRyEc6NKT7f/10JgVu1Gv0e9i9vlsUkODcsazbDn99zxsg/5OoFWZOcYrINTnG+EDByRKmmWCryLMRHBbPmIDBOLq5GDlbuhmv22yfsnQ9P3cvZa7bJ8AtO81qAs0Z1o3SqBvpDQPWRJnltq+vyCXjrXxJo/2xJLLQacZrr6lQPM8tkw8KoFhBvfVILxRLVP8+oKkW1k5L2RA9WBQMSAFegiLcEVpYHKvsZPFsHsyRRzEL93sTzEGoHXeRSz/nJqrOFZ15L66Uwq6s7GQpij+NLnTxvIEav9RstG8wvarVzQY6nQEaj0AwN/zx29vtGm8w2LgznqR89IAvthkwVPAckUUKzFkcUT/8CMeBShxf2moSZFWlbn+sogNvlmti62qVQLKCPp91/4shwc9669PUSkRVZTqdnb5TKC8XMaiXhhzS7lxiquBqCQqfy2lVhNJI02g6dobchrMz3QlQmGXlB9FGcZxdxOC0dyRmIIu0vw23sqJe/t89LsPG9eSvexqs\",\"expiration\":\"Mar 14, 2026, 1:31:57 PM\"},\"assumedRoleUser\":{\"assumedRoleId\":\"AROAT4YYMCIJP4TWKEFHR:backup-restore-session\",\"arn\":\"arn:aws:sts::REDACTED-ACCOUNT-ID:assumed-role/cloud-attack-lab-privileged-role/backup-restore-session\"}},\"additionalEventData\":{\"ExtendedRequestId\":\"MTp1cy1lYXN0LTE6UzoxNzczNDkxNTE3NjEzOlI6WnFjaFlKUUk=\",\"RequestDetails\":{\"endpointType\":\"regional\",\"awsServingRegion\":\"us-east-1\"}},\"requestID\":\"d27a15bd-bcdc-461d-a36f-ac75cf8d2911\",\"eventID\":\"f160597e-35a9-4143-9665-1532dab818a6\",\"readOnly\":true,\"resources\":[{\"accountId\":\"REDACTED-ACCOUNT-ID\",\"type\":\"AWS::IAM::Role\",\"ARN\":\"arn:aws:iam::REDACTED-ACCOUNT-ID:role/cloud-attack-lab-privileged-role\"}],\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"REDACTED-ACCOUNT-ID\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"sts.us-east-1.amazonaws.com\"}}"
+    }
+  ]
+}
