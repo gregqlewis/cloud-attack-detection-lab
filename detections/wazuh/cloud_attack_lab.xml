@@ -1,0 +1,48 @@
+<group name="cloud_attack_lab,aws,cloudtrail,">
+
+  <rule id="100201" level="10">
+    <if_sid>80200</if_sid>
+    <field name="aws.eventSource">iam.amazonaws.com</field>
+    <field name="aws.eventName">^ListUsers$|^ListRoles$|^ListPolicies$</field>
+    <field name="aws.userIdentity.userName">cloud-attack-lab-attacker</field>
+    <description>Cloud Attack Lab: IAM Enumeration by attacker identity (T1069.003)</description>
+    <mitre>
+      <id>T1069.003</id>
+    </mitre>
+  </rule>
+
+  <rule id="100202" level="12">
+    <if_sid>80200</if_sid>
+    <field name="aws.eventSource">sts.amazonaws.com</field>
+    <field name="aws.eventName">^AssumeRole$</field>
+    <field name="aws.userIdentity.type">^IAMUser$</field>
+    <field name="aws.userIdentity.userName">cloud-attack-lab-attacker</field>
+    <description>Cloud Attack Lab: Privilege Escalation via AssumeRole (T1078.004)</description>
+    <mitre>
+      <id>T1078.004</id>
+    </mitre>
+  </rule>
+
+  <rule id="100203" level="10">
+    <if_sid>80200</if_sid>
+    <field name="aws.eventSource">sts.amazonaws.com</field>
+    <field name="aws.eventName">^GetCallerIdentity$</field>
+    <field name="aws.userIdentity.userName">cloud-attack-lab-attacker</field>
+    <description>Cloud Attack Lab: GetCallerIdentity recon after credential theft (T1552.005)</description>
+    <mitre>
+      <id>T1552.005</id>
+    </mitre>
+  </rule>
+
+  <rule id="100204" level="12">
+    <if_sid>80200</if_sid>
+    <field name="aws.eventSource">s3.amazonaws.com</field>
+    <field name="aws.eventName">^PutObject$|^GetObject$</field>
+    <field name="aws.requestParameters.bucketName">cloud-attack-lab-exfil-bucket</field>
+    <description>Cloud Attack Lab: S3 data exfiltration (T1530)</description>
+    <mitre>
+      <id>T1530</id>
+    </mitre>
+  </rule>
+
+</group>
