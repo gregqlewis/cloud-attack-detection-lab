@@ -49,7 +49,7 @@ Response
 | IAM Enumeration | T1069.003 | ✅ Complete |
 | Privilege Escalation via Role Abuse | T1078.004 | ✅ Complete |
 | Credential Theft | T1552.005 | ✅ Complete |
-| S3 Data Exfiltration | T1530 | 🔜 Planned |
+| S3 Data Exfiltration | T1530 | ✅ Complete |
 | Unauthorized API Usage | T1106 | 🔜 Planned |
 
 ---
@@ -57,16 +57,29 @@ Response
 ## Where We Stand
 ```
 Attack Simulation
-  ✅ iam_enum.py
-  ✅ privilege_escalation.py
-  ⬜ credential_theft.py      ← next
-  ⬜ s3_exfil.py
+✅ iam_enum.py           — T1069.003
+✅ privilege_escalation.py — T1078.004
+✅ credential_theft.py   — T1552.005
+✅ s3_exfil.py           — T1530
 
 Detection Engineering
-  ✅ sigma/iam_enum.yml
-  ✅ sigma/privilege_escalation.yml
-  ⬜ sigma/credential_theft.yml
-  ⬜ sigma/s3_exfil.yml
+✅ sigma/iam_enum.yml
+✅ sigma/privilege_escalation.yml
+✅ sigma/credential_theft.yml
+✅ sigma/s3_exfil.yml
+✅ detections/wazuh/cloud_attack_lab.xml — custom Wazuh rules 100201–100204
+✅ detections/wazuh/README.md — rule design decisions and production tuning guidance
+✅ detections/opensearch/cloudtrail_queries.md — DQL queries per TTP
+
+Response Playbooks
+✅ playbooks/iam_compromise_response.md — T1069.003 + T1078.004
+✅ playbooks/s3_exfil_response.md — T1530
+
+Detection Pipeline
+✅ Wazuh 4.14.3 ingesting CloudTrail via wodle-aws
+✅ Custom rules 100201–100204 firing with MITRE tags
+✅ Alerts confirmed in wazuh-alerts-4.x-* index
+✅ 6 confirmed hits across all four TTPs
 ```
 ---
 
@@ -91,26 +104,37 @@ Detection Engineering
 cloud-attack-detection-lab/
 ├── README.md
 ├── terraform/
-│   ├── main.tf                  # provider config, budget alert
-│   ├── cloudtrail.tf            # CloudTrail trail and hardened log bucket
-│   ├── guardduty.tf             # GuardDuty detector with SNS alerting
-│   ├── vpc_flow_logs.tf         # VPC and flow log configuration
-│   ├── iam.tf                   # attacker identity and misconfigured role
-│   ├── s3.tf                    # target bucket and simulated sensitive data
-│   └── variables.tf             # centralized variable definitions
+│   ├── main.tf                    # provider config, budget alert
+│   ├── cloudtrail.tf              # CloudTrail trail and hardened log bucket
+│   ├── guardduty.tf               # GuardDuty detector with SNS alerting
+│   ├── vpc_flow_logs.tf           # VPC and flow log configuration
+│   ├── iam.tf                     # attacker identity and misconfigured role
+│   ├── s3.tf                      # target bucket and simulated sensitive data
+│   └── variables.tf               # centralized variable definitions
 ├── attack-simulation/
-│   ├── iam_enum.py              # T1069.003 - IAM enumeration
-│   ├── privilege_escalation.py  # T1078.004 - role assumption abuse
-│   ├── credential_theft.py      # T1552.005 - credential discovery
-│   ├── s3_exfil.py              # T1530 - S3 data exfiltration
+│   ├── evidence/                  # Redacted CloudTrail JSON evidence
+│   ├── iam_enum.py                # T1069.003 - IAM enumeration
+│   ├── iam_enum_cloudtrail_event.json
+│   ├── privilege_escalation.py    # T1078.004 - role assumption abuse
+│   ├── credential_theft.py        # T1552.005 - credential discovery
+│   ├── s3_exfil.py                # T1530 - S3 data exfiltration
+│   ├── requirements.txt
 │   └── README.md
 ├── detections/
-│   ├── sigma/                   # Sigma rules per attack scenario
-│   ├── opensearch/              # Converted OpenSearch queries
-│   └── python/                  # Python log analysis scripts
+│   ├── sigma/                     # Sigma rules per attack scenario
+│   │   ├── iam_enum.yml
+│   │   ├── privilege_escalation.yml
+│   │   ├── credential_theft.yml
+│   │   └── s3_exfil.yml
+│   ├── wazuh/                     # Custom Wazuh rules
+│   │   ├── cloud_attack_lab.xml   # Rules 100201–100204 with MITRE tags
+│   │   └── README.md              # Rule design decisions + production tuning
+│   ├── opensearch/                # DQL queries per TTP
+│   │   └── cloudtrail_queries.md
+│   └── python/                    # Python log analysis scripts
 ├── playbooks/
-│   ├── iam_compromise_response.md
-│   └── s3_exfil_response.md
+│   ├── iam_compromise_response.md # T1069.003 + T1078.004 response
+│   └── s3_exfil_response.md       # T1530 response
 └── blog-post/
     └── cloud-attack-detection-lab.md
 ```
