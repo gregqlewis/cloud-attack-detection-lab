@@ -1,0 +1,132 @@
+title: AWS S3 Data Exfiltration to Staging Bucket
+id: 2d7a4f8e-1b3c-4e9d-cf2a-5e8b0d3f7a1e
+status: experimental
+description: |
+  Detects S3 data exfiltration where an attacker reads objects from a target
+  bucket and writes them to a separate attacker-controlled staging bucket
+  (T1530 — Data from Cloud Storage).
+
+  The defining signal is the GetObject + PutObject pair from the same identity
+  in a short time window across two different buckets. Legitimate applications
+  read from buckets they own — they rarely read from one bucket and immediately
+  write to a different bucket using temporary STS credentials.
+
+  This rule covers two complementary signals:
+    1. PutObject to a bucket not owned by the principal making the call —
+       indicates data being staged outside its original location
+    2. GetObject on sensitive path prefixes by an AssumedRole identity —
+       indicates targeted collection before staging
+
+  Combined with privilege_escalation.yml Signal 2 (AssumedRole + GetObject),
+  these rules form a layered detection chain for the full exfiltration scenario:
+    AssumeRole → ListObjectsV2 → GetObject → PutObject
+
+  MITRE ATT&CK: T1530 - Data from Cloud Storage
+
+references:
+  - https://attack.mitre.org/techniques/T1530/
+  - https://attack.mitre.org/techniques/T1078/004/
+
+author: Greg Lewis
+date: 2026-03-14
+modified: 2026-03-14
+
+tags:
+  - attack.collection
+  - attack.t1530
+  - attack.exfiltration
+  - attack.privilege_escalation
+  - attack.t1078.004
+
+logsource:
+  product: aws
+  service: cloudtrail
+
+detection:
+
+  # Signal 1 — PutObject by an AssumedRole identity.
+  # The core exfiltration signal: attacker copies stolen data into
+  # their staging bucket using the escalated role credentials.
+  # PutObject by AssumedRole is unusual outside of CI/CD pipelines
+  # and backup automation — both of which should be in the filter list.
+  selection_putobject:
+    eventSource: 's3.amazonaws.com'
+    eventName: 'PutObject'
+    userIdentity.type: 'AssumedRole'
+
+  # Signal 2 — GetObject on sensitive path prefixes by AssumedRole.
+  # Targeted collection of high-value files prior to staging.
+  # The path prefixes reflect common sensitive data locations.
+  # Note: This overlaps with privilege_escalation.yml Signal 2 intentionally —
+  # running both rules provides independent alert coverage.
+  selection_getobject:
+    eventSource: 's3.amazonaws.com'
+    eventName: 'GetObject'
+    userIdentity.type: 'AssumedRole'
+    requestParameters.key|startswith:
+      - 'config/'
+      - 'finance/'
+      - 'hr/'
+      - 'secrets/'
+      - 'keys/'
+      - 'backup/'
+      - 'credentials/'
+
+  # Signal 3 — Bulk object enumeration immediately before exfiltration.
+  # ListObjectsV2 by AssumedRole on the target bucket indicates triage —
+  # the attacker is identifying what to steal before stealing it.
+  selection_enumeration:
+    eventSource: 's3.amazonaws.com'
+    eventName: 'ListObjectsV2'
+    userIdentity.type: 'AssumedRole'
+
+  # Filter — known legitimate assumed role activity
+  filter_known_roles:
+    userIdentity.sessionContext.sessionIssuer.userName:
+      - 'greg-admin'
+
+  # Filter — known legitimate CI/CD or backup session names
+  # Add your automation session names here as your environment grows
+  filter_automation:
+    requestParameters.metadata.x-amz-meta-exfil-source-bucket|exists: false
+
+  condition: >
+    (selection_putobject and not filter_known_roles) or
+    (selection_getobject and not filter_known_roles) or
+    (selection_enumeration and not filter_known_roles)
+
+falsepositives:
+  - Legitimate backup automation using assumed roles to copy data between buckets
+  - CI/CD pipelines deploying assets across S3 buckets
+  - Data migration jobs using temporary credentials
+  - Cross-account replication using assumed roles
+
+level: high
+
+# --- Detection Engineering Notes ---
+#
+# THE KEY SIGNAL: GetObject + PutObject PAIR
+# The highest-confidence detection is correlating Signal 1 and Signal 2
+# from the same sourceIPAddress and userIdentity ARN within a 5-minute window.
+# A single identity that reads from bucket A and writes to bucket B is
+# performing a copy operation — in CloudTrail terms, that's exfiltration.
+#
+# WHY THIS RULE COMPLEMENTS privilege_escalation.yml:
+# privilege_escalation.yml catches GetObject by AssumedRole (Signal 2 there).
+# This rule adds PutObject — the write to the staging bucket that confirms
+# the data actually left the target environment.
+# Together they cover the full read-then-stage exfiltration chain.
+#
+# HIGHEST FIDELITY TUNING (implement in OpenSearch):
+# Correlate GetObject and PutObject events where:
+#   - Same userIdentity.arn
+#   - Same sourceIPAddress
+#   - GetObject bucket = target bucket
+#   - PutObject bucket != GetObject bucket (different destination)
+#   - Within a 5-minute window
+# That correlation pattern has near-zero false positive rate.
+#
+# SESSION NAME NOTE:
+# The lab uses session name 'backup-restore-session' — a deliberate choice
+# to demonstrate that benign-sounding session names cannot be trusted as
+# a primary filter. Defenders must look at behavior, not naming.
