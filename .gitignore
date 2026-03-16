@@ -1,0 +1,27 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars        # this file will hold your account ID - never commit it
+terraform.tfvars.json
+*.tfvars
+*.tfvars.json
+
+# Python
+__pycache__/
+*.pyc
+.env                    # environment variables - never commit credentials
+
+# AWS
+.aws/
+credentials
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/.venv/
+venv/
+attack-simulation/.env
