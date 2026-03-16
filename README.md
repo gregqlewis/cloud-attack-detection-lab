@@ -11,30 +11,28 @@ This project demonstrates a purple team detection engineering workflow — simul
 ## Architecture
 
 ```
-Attack Simulation
-(Kali / Python scripts)
-        │
-        ▼
-AWS Environment
-(IAM, S3, VPC)
-        │
-        ▼
+Attack Simulation (Kali / Python scripts)
+│
+▼
+AWS Environment (IAM, S3, VPC)
+│
+▼
 Cloud Logs
-├── CloudTrail       — API call audit trail (control + data plane)
-├── VPC Flow Logs    — network-level traffic metadata
-└── GuardDuty        — AWS-native managed threat detection
-        │
-        ▼
+├── CloudTrail — API call audit trail (control + data plane)
+├── VPC Flow Logs — network-level traffic metadata
+└── GuardDuty — AWS-native managed threat detection
+│
+▼
 Detection Layer
 ├── Python log analysis scripts
 ├── Sigma rules (mapped to MITRE ATT&CK + MITRE ATLAS)
 └── Custom OpenSearch queries
-        │
-        ▼
+│
+▼
 Security Monitoring
 └── Wazuh / OpenSearch (homelab SIEM)
-        │
-        ▼
+│
+▼
 Response
 ├── Automated response (Lambda / Wazuh active response)
 └── Documented investigation playbooks
@@ -55,12 +53,13 @@ Response
 ---
 
 ## Where We Stand
+
 ```
 Attack Simulation
-✅ iam_enum.py           — T1069.003
+✅ iam_enum.py — T1069.003
 ✅ privilege_escalation.py — T1078.004
-✅ credential_theft.py   — T1552.005
-✅ s3_exfil.py           — T1530
+✅ credential_theft.py — T1552.005
+✅ s3_exfil.py — T1530
 
 Detection Engineering
 ✅ sigma/iam_enum.yml
@@ -81,6 +80,35 @@ Detection Pipeline
 ✅ Alerts confirmed in wazuh-alerts-4.x-* index
 ✅ 6 confirmed hits across all four TTPs
 ```
+
+---
+
+## 🎓 Python Bootcamp
+
+An interactive Python training app built directly from this lab's attack simulation scripts. It teaches Python fundamentals through the lens of cloud security — every concept is grounded in real CloudTrail events, boto3 patterns, and MITRE ATT&CK techniques from this project.
+
+**🔗 Live App:** [gregqlewis.com/cloud-attack-detection-lab/bootcamp/](https://gregqlewis.com/cloud-attack-detection-lab/bootcamp/)
+
+### What It Covers
+
+| Mission | Python Concepts | Lab Script | MITRE |
+|---|---|---|---|
+| Mission 1: Decode the Evidence | Variables, Dictionaries, Boolean Comparison | `iam_enum.py` | T1069.003 |
+| Mission 2: Pattern Recognition | Lists, Loops, Conditionals, `.lower()`, `+=` | `credential_theft.py` | T1530 |
+| Mission 3: Build Your First Detection Rule | Functions, Parameters, Return Values, `.get()` | `privilege_escalation.py` | T1078.004 |
+| Mission 4: The Attack Chain Analyzer | Classes, `__init__`, `self`, State Persistence | `credential_theft.py` | T1552.005 |
+
+### How It Works
+
+- Each mission opens with a simulated SOC alert tied to a real attack scenario from this lab
+- Concept slides explain each Python topic in plain English before any coding
+- Fill-in-the-blank challenges use real CloudTrail event structures from the lab's evidence files
+- Answers are graded with per-question XP — incorrect answers earn 0 XP, hints cost 10 XP
+- Progress saves in `localStorage` at the hosted URL
+
+### Stack
+React + Vite, deployed to GitHub Pages via `gh-pages`. Source in `bootcamp/`.
+
 ---
 
 ## Infrastructure Status
@@ -104,37 +132,41 @@ Detection Pipeline
 cloud-attack-detection-lab/
 ├── README.md
 ├── terraform/
-│   ├── main.tf                    # provider config, budget alert
-│   ├── cloudtrail.tf              # CloudTrail trail and hardened log bucket
-│   ├── guardduty.tf               # GuardDuty detector with SNS alerting
-│   ├── vpc_flow_logs.tf           # VPC and flow log configuration
-│   ├── iam.tf                     # attacker identity and misconfigured role
-│   ├── s3.tf                      # target bucket and simulated sensitive data
-│   └── variables.tf               # centralized variable definitions
+│   ├── main.tf                # provider config, budget alert
+│   ├── cloudtrail.tf          # CloudTrail trail and hardened log bucket
+│   ├── guardduty.tf           # GuardDuty detector with SNS alerting
+│   ├── vpc_flow_logs.tf       # VPC and flow log configuration
+│   ├── iam.tf                 # attacker identity and misconfigured role
+│   ├── s3.tf                  # target bucket and simulated sensitive data
+│   └── variables.tf           # centralized variable definitions
 ├── attack-simulation/
-│   ├── evidence/                  # Redacted CloudTrail JSON evidence
-│   ├── iam_enum.py                # T1069.003 - IAM enumeration
+│   ├── evidence/              # Redacted CloudTrail JSON evidence
+│   ├── iam_enum.py            # T1069.003 - IAM enumeration
 │   ├── iam_enum_cloudtrail_event.json
-│   ├── privilege_escalation.py    # T1078.004 - role assumption abuse
-│   ├── credential_theft.py        # T1552.005 - credential discovery
-│   ├── s3_exfil.py                # T1530 - S3 data exfiltration
+│   ├── privilege_escalation.py  # T1078.004 - role assumption abuse
+│   ├── credential_theft.py    # T1552.005 - credential discovery
+│   ├── s3_exfil.py            # T1530 - S3 data exfiltration
 │   ├── requirements.txt
 │   └── README.md
 ├── detections/
-│   ├── sigma/                     # Sigma rules per attack scenario
+│   ├── sigma/                 # Sigma rules per attack scenario
 │   │   ├── iam_enum.yml
 │   │   ├── privilege_escalation.yml
 │   │   ├── credential_theft.yml
 │   │   └── s3_exfil.yml
-│   ├── wazuh/                     # Custom Wazuh rules
-│   │   ├── cloud_attack_lab.xml   # Rules 100201–100204 with MITRE tags
-│   │   └── README.md              # Rule design decisions + production tuning
-│   ├── opensearch/                # DQL queries per TTP
+│   ├── wazuh/                 # Custom Wazuh rules
+│   │   ├── cloud_attack_lab.xml  # Rules 100201–100204 with MITRE tags
+│   │   └── README.md          # Rule design decisions + production tuning
+│   ├── opensearch/            # DQL queries per TTP
 │   │   └── cloudtrail_queries.md
-│   └── python/                    # Python log analysis scripts
+│   └── python/                # Python log analysis scripts
 ├── playbooks/
-│   ├── iam_compromise_response.md # T1069.003 + T1078.004 response
-│   └── s3_exfil_response.md       # T1530 response
+│   ├── iam_compromise_response.md  # T1069.003 + T1078.004 response
+│   └── s3_exfil_response.md        # T1530 response
+├── bootcamp/                  # Interactive Python training app
+│   ├── src/App.jsx            # Full bootcamp game — React + Vite
+│   ├── vite.config.js
+│   └── README.md
 └── blog-post/
     └── cloud-attack-detection-lab.md
 ```
@@ -144,16 +176,12 @@ cloud-attack-detection-lab/
 ## Detection Design Decisions
 
 ### Why Multi-Region CloudTrail
-CloudTrail is configured as a multi-region trail rather than region-scoped. An attacker with valid credentials is not constrained to operate in the same region as the defender's primary workspace. Operating in an unwatched region is a low-effort evasion technique that a single-region trail misses entirely.
-
-Setting `is_multi_region_trail = true` ensures all API activity across every AWS region flows into the same detection pipeline regardless of where the attacker operates.
+CloudTrail is configured as a multi-region trail rather than region-scoped. An attacker with valid credentials is not constrained to operate in the same region as the defender's primary workspace. Operating in an unwatched region is a low-effort evasion technique that a single-region trail misses entirely. Setting `is_multi_region_trail = true` ensures all API activity across every AWS region flows into the same detection pipeline regardless of where the attacker operates.
 
 **MITRE ATT&CK reference:** T1535 - Unused/Unsupported Cloud Regions
 
 ### Why Both Management and Data Events
-CloudTrail management events capture control plane activity — creating and modifying resources. Data events capture data plane activity — actual object-level operations like S3 GetObject.
-
-S3 exfiltration is invisible without data events enabled. The attacker's bucket manipulation shows up in management events, but the actual file downloads do not. Both are required for complete visibility.
+CloudTrail management events capture control plane activity — creating and modifying resources. Data events capture data plane activity — actual object-level operations like S3 GetObject. S3 exfiltration is invisible without data events enabled. The attacker's bucket manipulation shows up in management events, but the actual file downloads do not. Both are required for complete visibility.
 
 ### Why GuardDuty Alongside Custom Sigma Rules
 GuardDuty provides AWS-native threat detection against the same log sources. Running both allows direct comparison between managed detection and custom-built rules — a core detection engineering skill. Gaps between what GuardDuty finds and what custom rules find inform rule quality and tuning.
@@ -180,9 +208,7 @@ The target-data bucket represents a common real-world finding: an S3 bucket prov
 ## Lessons Learned
 
 ### Terraform depends_on — CloudTrail Bucket Policy Race Condition
-During initial deployment, CloudTrail failed to create because it validated the S3 bucket policy at creation time — before Terraform had finished applying it. Terraform could not infer this dependency automatically from resource references alone.
-
-Fix: added explicit `depends_on` to the CloudTrail trail resource pointing to both the bucket policy and public access block. This is a common pattern when AWS services validate dependent resources at creation time rather than at runtime.
+During initial deployment, CloudTrail failed to create because it validated the S3 bucket policy at creation time — before Terraform had finished applying it. Terraform could not infer this dependency automatically from resource references alone. Fix: added explicit `depends_on` to the CloudTrail trail resource pointing to both the bucket policy and public access block. This is a common pattern when AWS services validate dependent resources at creation time rather than at runtime.
 
 ### Accidentally Committed terraform.tfvars
 During lab setup, `terraform.tfvars` containing the AWS account ID and alert email was accidentally committed to the public repository. The file did not contain access keys — credentials live in `~/.aws/credentials` which was never tracked.
@@ -242,8 +268,10 @@ terraform apply
 ### 4. Configure attacker profile
 ```bash
 aws configure --profile lab-attacker
-# Use credentials from: terraform output attacker_access_key_id
-# and: terraform output attacker_secret_access_key
+# Use credentials from:
+terraform output attacker_access_key_id
+# and:
+terraform output attacker_secret_access_key
 ```
 
 ---
@@ -262,8 +290,6 @@ This lab uses pay-per-use AWS resources. Always destroy resources when not activ
 | Monthly max (with budget alert) | $10 hard ceiling |
 
 ### Teardown Command
-Run this at the end of every lab session:
-
 ```bash
 terraform destroy -auto-approve
 ```
@@ -296,3 +322,4 @@ terraform destroy -auto-approve
 | OpenSearch | Log indexing and query engine |
 | MITRE ATT&CK | Attack technique mapping |
 | MITRE ATLAS | AI/ML threat mapping (credential theft scenarios) |
+| React + Vite | Interactive Python bootcamp training app |
