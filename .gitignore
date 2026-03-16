@@ -25,3 +25,5 @@ credentials
 .vscode/.venv/
 venv/
 attack-simulation/.env
+bootcamp/node_modules/
+bootcamp/dist/
