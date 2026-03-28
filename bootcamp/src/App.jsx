@@ -454,6 +454,13 @@ const mute = "#64748b";
 const acc  = "#22d3ee";
 const gold = "#fbbf24";
 
+// inject global reset to kill browser default body margin/padding
+if (typeof document !== "undefined") {
+  const s = document.createElement("style");
+  s.textContent = "*, *::before, *::after { box-sizing: border-box; } html, body { margin: 0; padding: 0; background: #030712; }";
+  document.head.appendChild(s);
+}
+
 const wrap  = { minHeight: "100vh", background: bg, color: tx, padding: 16, fontFamily: "monospace" };
 const inner = { maxWidth: 580, margin: "0 auto" };
 const card  = (extra = {}) => ({ background: surf, border: `1px solid ${bdr}`, borderRadius: 12, padding: 16, ...extra });
