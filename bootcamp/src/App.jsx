@@ -717,7 +717,7 @@ const pill  = (bg2, extra = {}) => ({ background: bg2, border: "none", color: "#
 const ghost = (extra = {}) => ({ background: "none", border: "none", color: mute, cursor: "pointer", fontSize: 13, fontFamily: "monospace", padding: 0, ...extra });
 
 export default function App() {
-  const SEED = { xp: 450, completed: ["m1","m2","m3","m4","m5"], history: { m1:{earned:75,correct:4,total:4}, m2:{earned:75,correct:4,total:4}, m3:{earned:75,correct:5,total:5}, m4:{earned:100,correct:4,total:4}, m5:{earned:125,correct:5,total:5} } };
+  const SEED = { xp: 875, completed: ["m1","m2","m3","m4","m5","m6","m7","m8"], history: { m1:{earned:75,correct:4,total:4}, m2:{earned:75,correct:4,total:4}, m3:{earned:75,correct:5,total:5}, m4:{earned:100,correct:4,total:4}, m5:{earned:125,correct:5,total:5}, m6:{earned:100,correct:5,total:5}, m7:{earned:100,correct:5,total:5}, m8:{earned:125,correct:5,total:5} } };
   const saved = loadSave();
   const base  = (saved && saved.xp > 0) ? saved : SEED;
 
