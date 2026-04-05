@@ -2,6 +2,7 @@
 # Enables AWS GuardDuty - managed threat detection service
 # Analyzes CloudTrail, VPC Flow Logs, and DNS logs automatically
 # Generates findings mapped to MITRE ATT&CK
+data "aws_caller_identity" "current" {}
 
 # Enable GuardDuty detector - kept minimal, features configured separately
 resource "aws_guardduty_detector" "lab" {
@@ -87,4 +88,87 @@ resource "aws_sns_topic_policy" "guardduty_findings" {
       }
     ]
   })
+}
+
+## S3 Bucket for GuardDuty Findings Exports
+resource "aws_s3_bucket" "guardduty_findings" {
+  bucket = "${var.project_name}-guardduty-findings-${var.aws_account_id}"
+}
+
+resource "aws_s3_bucket_public_access_block" "guardduty_findings" {
+  bucket = aws_s3_bucket.guardduty_findings.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_policy" "guardduty_findings" {
+  bucket = aws_s3_bucket.guardduty_findings.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowS3Access"
+        Effect = "Allow"
+        Principal = {
+          Service = "guardduty.amazonaws.com"
+        }
+        Action   = [
+          "s3:GetBucketLocation"
+        ]
+        Resource = "${aws_s3_bucket.guardduty_findings.arn}"
+      },
+      {
+        Sid    = "AllowS3PutObject"
+        Effect = "Allow"
+        Principal = {
+          Service = "guardduty.amazonaws.com"
+        }
+        Action   = [
+          "s3:PutObject"
+        ]
+        Resource = "${aws_s3_bucket.guardduty_findings.arn}/*"
+      }
+    ]
+  })
+}
+
+resource "aws_kms_key" "guardduty_findings" {
+  description             = "KMS key for encrypting GuardDuty findings exports"
+  deletion_window_in_days = 7 # Minimum is 7 days, gives you time to recover if you delete by mistake 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowS3Encryption"
+        Effect = "Allow"
+        Principal = {
+          Service = "guardduty.amazonaws.com"
+        }
+        Action = [
+          "kms:GenerateDataKey*"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid       = "AllowFullAccessToKeyAdministrators"
+        Effect    = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+      }
+        Action    = "kms:*"
+        Resource  = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_guardduty_publishing_destination" "guardduty_findings" {
+  detector_id      = aws_guardduty_detector.lab.id
+  destination_arn  = aws_s3_bucket.guardduty_findings.arn
+  kms_key_arn      = aws_kms_key.guardduty_findings.arn
+
+  depends_on = [ aws_s3_bucket_policy.guardduty_findings, ]
 }
