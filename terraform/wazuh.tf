@@ -1,6 +1,9 @@
 ## Wazuh IAM Resources
 # Wazuh needs permissions to read from CloudTrail Logs and S3
 
+# TODO: access keys are managed outside Terraform (on Wazuh VM)
+# Manual deletion required before terraform destroy
+
 resource "aws_iam_user" "wazuh_cloudtrail_reader" {
   name = "wazuh-cloudtrail-reader"
 }
